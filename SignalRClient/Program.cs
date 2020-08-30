@@ -17,10 +17,9 @@ namespace SignalRClient
         }
         private static async Task Run()
         {
-            ConsoleKeyInfo keyinfo;
-            string host = "https://localhost:44306/";
+            string host = "http://localhost/NotificationWebService";
 
-            Console.Title = "Chat App";
+            Console.Title = "Notification App";
             while (true)
             {
                 var hubConnection = new HubConnection(host);
@@ -42,8 +41,8 @@ namespace SignalRClient
                         });
                         while (true)
                         {
-                            Console.ReadLine();  //entera basınca bildirim düşsün
-                            notificationHub.Invoke("SendNotification").ContinueWith(task1 =>
+                            var message = Console.ReadLine();  //entera basınca bildirim düşsün
+                            notificationHub.Invoke("CreateNotification","SuperCook",message).ContinueWith(task1 =>
                             {
                                 if (task1.IsFaulted)
                                 {
