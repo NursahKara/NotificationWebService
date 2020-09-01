@@ -30,7 +30,7 @@ namespace NotificationWebService.Hubs
                 ctx.SaveChanges();
                 foreach (var notification in ctx.Notifications.ToList())
                 {
-                    Clients.All.ReceiveNotification(new
+                    Clients.Caller.ReceiveNotification(new
                     {
                         title = notification.Title,
                         message = notification.Message
