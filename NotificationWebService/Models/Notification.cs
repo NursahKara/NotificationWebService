@@ -6,7 +6,7 @@ using System.Web;
 
 namespace NotificationWebService.Models
 {
-    public class Notifications
+    public class Notification
     {
         [Key]
         public int Id { get; set; }
