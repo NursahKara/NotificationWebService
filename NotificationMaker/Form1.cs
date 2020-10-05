@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR.Client;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NotificationWebService.Models;
+using NotificationWebService.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 namespace NotificationMaker
 {
     public partial class Form1 : Form
@@ -35,7 +37,16 @@ namespace NotificationMaker
                 {
                     var title = txtTitle.Text;
                     var message = txtMessage.Text;
-                    notificationHub.Invoke("CreateNotification", title, message);
+                    var receiver = txtReceiver.Text;
+                    var model = new MessageModel()
+                    {
+                        Message = title,
+                        Title = message,
+                        SenderUserGuid = "senderuser",
+                        ReceiverUserGuid = receiver,
+                        DateCreated = DateTime.Now,
+                    };
+                    notificationHub.Invoke("CreateNotification",model);
                 }
             }).Wait();
             lblStatus.ForeColor = Color.Lime;

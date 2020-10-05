@@ -7,13 +7,13 @@ namespace NotificationWebService.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class init : IMigrationMetadata
+    public sealed partial class NotificationV2 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(NotificationV2));
         
         string IMigrationMetadata.Id
         {
-            get { return "202008301918220_init"; }
+            get { return "202010051734296_NotificationV2"; }
         }
         
         string IMigrationMetadata.Source

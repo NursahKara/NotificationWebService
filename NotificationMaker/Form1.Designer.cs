@@ -34,6 +34,8 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblMessage = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.txtReceiver = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtTitle
@@ -45,7 +47,7 @@
             // 
             // txtMessage
             // 
-            this.txtMessage.Location = new System.Drawing.Point(96, 94);
+            this.txtMessage.Location = new System.Drawing.Point(96, 80);
             this.txtMessage.MaxLength = 140;
             this.txtMessage.Multiline = true;
             this.txtMessage.Name = "txtMessage";
@@ -74,7 +76,7 @@
             // lblMessage
             // 
             this.lblMessage.AutoSize = true;
-            this.lblMessage.Location = new System.Drawing.Point(42, 101);
+            this.lblMessage.Location = new System.Drawing.Point(42, 87);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(38, 13);
             this.lblMessage.TabIndex = 4;
@@ -91,12 +93,32 @@
             this.lblStatus.Text = "Test";
             this.lblStatus.Visible = false;
             // 
+            // txtReceiver
+            // 
+            this.txtReceiver.Location = new System.Drawing.Point(96, 120);
+            this.txtReceiver.MaxLength = 140;
+            this.txtReceiver.Multiline = true;
+            this.txtReceiver.Name = "txtReceiver";
+            this.txtReceiver.Size = new System.Drawing.Size(183, 20);
+            this.txtReceiver.TabIndex = 6;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(42, 123);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(26, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Alıcı";
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(361, 221);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtReceiver);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.lblTitle);
@@ -121,6 +143,8 @@
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.TextBox txtReceiver;
+        private System.Windows.Forms.Label label1;
     }
 }
 
