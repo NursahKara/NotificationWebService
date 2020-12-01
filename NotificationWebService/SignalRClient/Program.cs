@@ -42,7 +42,6 @@ namespace SignalRClient
                             {
                                 Console.WriteLine(notification.Message);
                                 Console.WriteLine(notification.DateCreated);
-                                Console.WriteLine(notification);
                             }
                         });
                         Console.WriteLine("Connected");

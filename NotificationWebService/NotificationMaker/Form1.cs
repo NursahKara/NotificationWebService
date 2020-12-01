@@ -46,7 +46,7 @@ namespace NotificationMaker
                         ReceiverUserGuid = receiver,
                         DateCreated = DateTime.Now,
                     };
-                    notificationHub.Invoke("CreateNotification", model);
+                    notificationHub.Invoke("CreateNotification",model);
                 }
             }).Wait();
             lblStatus.ForeColor = Color.Lime;
@@ -55,14 +55,6 @@ namespace NotificationMaker
             txtMessage.Clear();
             txtTitle.Clear();
             hubConnection.Stop();
-        }
-        public class MessageModel
-        {
-            public string Message { get; set; }
-            public string Title { get; set; }
-            public string SenderUserGuid { get; set; }
-            public string ReceiverUserGuid { get; set; }
-            public DateTime DateCreated { get; set; }
         }
     }
 }

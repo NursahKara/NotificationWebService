@@ -16,16 +16,12 @@ namespace NotificationWebService.Hubs
     public class NotificationHub : Hub
     {
         private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
-        public void MarkNotificationsAsRead()
+        public void MarkNotificationAsRead(string guid)
         {
             using (var ctx = new DatabaseContext())
             {
-                var userGuid = GetCurrentUserGuid();
-                var notifications = ctx.Notifications.Where(w => w.ReceiverUserGuid.Equals(userGuid)).ToList();
-                foreach (var item in notifications)
-                {
-                    item.IsRead = true;
-                }
+                var notification = ctx.Notifications.SingleOrDefault(w => w.Guid.Equals(guid));
+                notification.IsRead = true;
                 ctx.SaveChanges();
             }
         }
@@ -58,7 +54,7 @@ namespace NotificationWebService.Hubs
                 ctx.SaveChanges();
                 foreach (var notification in ctx.Notifications.ToList())
                 {
-                    Clients.All.ReceiveNotifications(new
+                    Clients.Caller.ReceiveNotification(new
                     {
                         title = notification.Title,
                         message = notification.Message,
@@ -108,7 +104,8 @@ namespace NotificationWebService.Hubs
             //{
             //    Clients.Caller.AddError("You are unauthorized");
             //}
-            GetUnreceivedNotifications();
+            //var unreceivedNotifications = GetUnreceivedNotifications();
+            //SendNotifications(unreceivedNotifications);
             return base.OnConnected();
         }
         private string GetCurrentUserGuid()
