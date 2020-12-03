@@ -18,16 +18,17 @@ namespace NotificationWebService.Hubs
         private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
         public void MarkNotificationsAsRead()
         {
-            using (var ctx = new DatabaseContext())
-            {
-                var userGuid = GetCurrentUserGuid();
-                var notifications = ctx.Notifications.Where(w => w.ReceiverUserGuid.Equals(userGuid)).ToList();
-                foreach (var item in notifications)
-                {
-                    item.IsRead = true;
-                }
-                ctx.SaveChanges();
-            }
+            //using (var ctx = new DatabaseContext())
+            //{
+            //    var userGuid = GetCurrentUserGuid();
+            //    var notifications = ctx.Notifications.Where(w => w.ReceiverUserGuid.Equals(userGuid) &&  w.IsRead==false).ToList();
+            //    foreach (var item in notifications)
+            //    {
+            //        item.IsRead = true;
+            //        item.DateRead = DateTime.Now;
+            //    }
+            //    ctx.SaveChanges();
+            //}
         }
         public void MarkNotificationsAsReceived(List<string> guids)
         {
@@ -37,6 +38,7 @@ namespace NotificationWebService.Hubs
                 foreach (var notification in notificatonsToMark)
                 {
                     notification.IsReceived = true;
+                    notification.DateReceived = DateTime.Now;
                 }
                 ctx.SaveChanges();
             }
@@ -45,39 +47,37 @@ namespace NotificationWebService.Hubs
         {
             using (var ctx = new DatabaseContext())
             {
-                ctx.Notifications.Add(new Notification()
+                model.DateCreated = DateTime.Now;
+                model.Category = "deneme";
+                var notification = new Notification()
                 {
                     Message = model.Message,
                     Title = model.Title,
                     ReceiverUserGuid = model.ReceiverUserGuid,
                     DateCreated = DateTime.Now,
                     Guid = Guid.NewGuid().ToString(),
+                    Category = "deneme",
                     IsReceived = false,
                     IsRead = false
-                });
+                };
+                ctx.Notifications.Add(notification);
                 ctx.SaveChanges();
-                foreach (var notification in ctx.Notifications.ToList())
-                {
-                    Clients.All.ReceiveNotifications(new
-                    {
-                        title = notification.Title,
-                        message = notification.Message,
-                        receiverUserGuid = notification.ReceiverUserGuid,
-                        guid = notification.Guid,
-                        dateCreated = notification.DateCreated
-                    });
-                }
+                var list = new List<NotificationModel>();
+                list.Add(model);
+                SendNotifications(list);
             }
         }
         public void SendNotifications(List<NotificationModel> notifications)
         {
             if (notifications.Count() > 0)
             {
-                Clients.User(GetCurrentUserGuid()).ReceiveNotifications(new
+                foreach (var notification in notifications)
                 {
-                    notifications = notifications,
-                    count = notifications.Count
-                });
+                    Clients.User(notification.ReceiverUserGuid).ReceiveNotifications(new
+                    {
+                        notification
+                    });
+                }
             }
         }
         public void GetUnreceivedNotifications()

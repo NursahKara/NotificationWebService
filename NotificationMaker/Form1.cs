@@ -23,7 +23,8 @@ namespace NotificationMaker
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            var hubConnection = new HubConnection(host);
+            var token = "6UmQSkZ_J5e1uizIW8wBqMZgcmZ_KvVB7fnZwZXf02pl-rq1M3yEGWYGRuqrfD5NWgacH-1E90GXNVqmBvQxBg8Pku5jsX_Fj9X2x-YuUbi9nqHV3Lpycrw4OxoQ3iPUe0QBLCD0KtDMxHkEUqNhBR7w24GU97MeUDN_wryTry_12FjovciSV1iSzifOhstYXK6CmBermHV6MpHoontDJFKWZ_2pjYF0hMBKJ8VkIr9y0BRPcXd__okaJ_eCKCFa2TAPwnOfOXmCALX4pIk4DaTMyyEnTRUq7qmK4AB1eiw8EwYMifPVYMTTiGMmahy5uaUS9N7O7cc37gsK2c-UuA";
+            var hubConnection = new HubConnection(host, $"bearer={token}");
             IHubProxy notificationHub = hubConnection.CreateHubProxy("NotificationHub");
             lblStatus.Text = "Waiting";
             lblStatus.Visible = true;
@@ -40,11 +41,10 @@ namespace NotificationMaker
                     var receiver = txtReceiver.Text;
                     var model = new MessageModel()
                     {
-                        Message = title,
-                        Title = message,
+                        Message = message,
+                        Title = title,
                         SenderUserGuid = "senderuser",
-                        ReceiverUserGuid = receiver,
-                        DateCreated = DateTime.Now,
+                        ReceiverUserGuid = "a61c2f26-c603-46c7-a170-4ae9ac969e18",
                     };
                     notificationHub.Invoke("CreateNotification", model);
                 }
