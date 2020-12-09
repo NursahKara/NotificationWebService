@@ -3,6 +3,7 @@ using NotificationWebService.Models;
 using NotificationWebService.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -16,54 +17,63 @@ namespace NotificationWebService.Hubs
     public class NotificationHub : Hub
     {
         private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
-        public void MarkNotificationsAsRead()
-        {
-            //using (var ctx = new DatabaseContext())
-            //{
-            //    var userGuid = GetCurrentUserGuid();
-            //    var notifications = ctx.Notifications.Where(w => w.ReceiverUserGuid.Equals(userGuid) &&  w.IsRead==false).ToList();
-            //    foreach (var item in notifications)
-            //    {
-            //        item.IsRead = true;
-            //        item.DateRead = DateTime.Now;
-            //    }
-            //    ctx.SaveChanges();
-            //}
-        }
-        public void MarkNotificationsAsReceived(List<string> guids)
+        public void MarkNotificationsAsReceived()
         {
             using (var ctx = new DatabaseContext())
             {
-                var notificatonsToMark = ctx.Notifications.Where(w => guids.Contains(w.Guid));
-                foreach (var notification in notificatonsToMark)
+                var userGuid = GetCurrentUserGuid();
+                var notifications = ctx.Notifications.Where(w => w.ReceiverUserGuid.Equals(userGuid) && w.IsReceived == false).ToList();
+                foreach (var item in notifications)
                 {
-                    notification.IsReceived = true;
-                    notification.DateReceived = DateTime.Now;
+                    item.IsReceived = true;
+                    item.DateReceived = DateTime.Now;
                 }
                 ctx.SaveChanges();
             }
         }
+        public void MarkNotificationAsRead(string guid)
+        {
+            using (var ctx = new DatabaseContext())
+            {
+                var userGuid = GetCurrentUserGuid();
+                var notifications = ctx.Notifications.Where(w => w.Guid == guid.ToLower()).ToList();
+                foreach (var item in notifications)
+                {
+                    item.IsRead = true;
+                    item.DateRead = DateTime.Now;
+                }
+                ctx.SaveChanges();
+            }
+        }
+
         public void CreateNotification(NotificationModel model)
         {
             using (var ctx = new DatabaseContext())
             {
+                if (ctx.Users.SingleOrDefault(w => w.Guid == model.ReceiverUserGuid.ToLower()) == null)
+                {
+                    Clients.Caller.AddError("No such user with the given guid");
+                    return;
+                }
+                model.Guid = Guid.NewGuid().ToString();
                 model.DateCreated = DateTime.Now;
-                model.Category = "deneme";
                 var notification = new Notification()
                 {
                     Message = model.Message,
                     Title = model.Title,
-                    ReceiverUserGuid = model.ReceiverUserGuid,
-                    DateCreated = DateTime.Now,
-                    Guid = Guid.NewGuid().ToString(),
-                    Category = "deneme",
+                    ReceiverUserGuid = model.ReceiverUserGuid.ToLower(),
+                    Category = model.Category.ToUpper(new CultureInfo("tr-TR")),
+                    DateCreated = model.DateCreated,
+                    Guid = model.Guid,
                     IsReceived = false,
                     IsRead = false
                 };
                 ctx.Notifications.Add(notification);
                 ctx.SaveChanges();
-                var list = new List<NotificationModel>();
-                list.Add(model);
+                var list = new List<NotificationModel>
+                {
+                    model
+                };
                 SendNotifications(list);
             }
         }
@@ -104,10 +114,10 @@ namespace NotificationWebService.Hubs
         }
         public override Task OnConnected()
         {
-            //if (!Context.User.Identity.IsAuthenticated)
-            //{
-            //    Clients.Caller.AddError("You are unauthorized");
-            //}
+            if (!Context.User.Identity.IsAuthenticated)
+            {
+                Clients.Caller.AddError("You are unauthorized");
+            }
             GetUnreceivedNotifications();
             return base.OnConnected();
         }

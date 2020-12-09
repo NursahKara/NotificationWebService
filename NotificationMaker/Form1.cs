@@ -38,12 +38,12 @@ namespace NotificationMaker
                 {
                     var title = txtTitle.Text;
                     var message = txtMessage.Text;
-                    var receiver = txtReceiver.Text;
-                    var model = new MessageModel()
+                    var category = txtCategory.Text;
+                    var model = new NotificationModel()
                     {
                         Message = message,
                         Title = title,
-                        SenderUserGuid = "senderuser",
+                        Category = category ?? "DEFAULT",
                         ReceiverUserGuid = "a61c2f26-c603-46c7-a170-4ae9ac969e18",
                     };
                     notificationHub.Invoke("CreateNotification", model);
@@ -56,13 +56,12 @@ namespace NotificationMaker
             txtTitle.Clear();
             hubConnection.Stop();
         }
-        public class MessageModel
+        public class NotificationModel
         {
-            public string Message { get; set; }
             public string Title { get; set; }
-            public string SenderUserGuid { get; set; }
+            public string Message { get; set; }
+            public string Category { get; set; }
             public string ReceiverUserGuid { get; set; }
-            public DateTime DateCreated { get; set; }
         }
     }
 }
