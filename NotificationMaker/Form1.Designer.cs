@@ -34,8 +34,8 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblMessage = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
-            this.txtCategory = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.cmbNotificationSettings = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // txtTitle
@@ -93,15 +93,6 @@
             this.lblStatus.Text = "Test";
             this.lblStatus.Visible = false;
             // 
-            // txtCategory
-            // 
-            this.txtCategory.Location = new System.Drawing.Point(96, 120);
-            this.txtCategory.MaxLength = 140;
-            this.txtCategory.Multiline = true;
-            this.txtCategory.Name = "txtCategory";
-            this.txtCategory.Size = new System.Drawing.Size(183, 20);
-            this.txtCategory.TabIndex = 6;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -111,14 +102,22 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "Kategori";
             // 
+            // cmbNotificationSettings
+            // 
+            this.cmbNotificationSettings.FormattingEnabled = true;
+            this.cmbNotificationSettings.Location = new System.Drawing.Point(96, 120);
+            this.cmbNotificationSettings.Name = "cmbNotificationSettings";
+            this.cmbNotificationSettings.Size = new System.Drawing.Size(183, 21);
+            this.cmbNotificationSettings.TabIndex = 8;
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(361, 221);
+            this.Controls.Add(this.cmbNotificationSettings);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtCategory);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.lblTitle);
@@ -143,8 +142,8 @@
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.Label lblStatus;
-        private System.Windows.Forms.TextBox txtCategory;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cmbNotificationSettings;
     }
 }
 

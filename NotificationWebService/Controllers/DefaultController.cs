@@ -34,7 +34,7 @@ namespace NotificationWebService.Controllers
                             message = "Kullanıcı adı zaten var"
                         });
                     }
-                    ctx.Users.Add(new User()
+                    var user = new User()
                     {
                         UserName = model.UserName,
                         Password = BCryptHelper.HashPassword(model.Password, BCryptHelper.GenerateSalt(12)),
@@ -42,6 +42,18 @@ namespace NotificationWebService.Controllers
                         Guid = Guid.NewGuid().ToString(),
                         DateCreated = DateTime.Now,
                         Status = 1
+                    };
+                    ctx.Users.Add(user);
+                    ctx.NotificationSettings.Add(new NotificationSettings()
+                    {
+                        UserGuid = user.Guid,
+                        HizmetBaslik = true,
+                        InvoiceForPayment = true,
+                        MaterialRequisition = true,
+                        PurchaseOrder = true,
+                        PurchaseReqLine = true,
+                        PurchseOrderMilestoneLine = true,
+                        QuotationLinePart = true
                     });
                     ctx.SaveChanges();
 
@@ -185,14 +197,14 @@ namespace NotificationWebService.Controllers
         }
 
         [NonAction]
-        public User GetCurrentUserGuid()
+        public string GetCurrentUserGuid()
         {
             using (var ctx = new DatabaseContext())
             {
                 var identity = (ClaimsIdentity)User.Identity;
                 var claims = identity.Claims.ToList();
                 var username = claims[0].Value;
-                return ctx.Users.SingleOrDefault(w => w.Guid == username);
+                return ctx.Users.SingleOrDefault(w => w.Guid == username).Guid;
             }
         }
 
@@ -213,6 +225,33 @@ namespace NotificationWebService.Controllers
                     success = true,
                     profile
 
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+        [HttpGet]
+        public IHttpActionResult SwitchNotificationSetting(string notificationType)
+        {
+            try
+            {
+                var userGuid = GetCurrentUserGuid();
+                using (var ctx = new DatabaseContext())
+                {
+                    var settings = ctx.NotificationSettings.SingleOrDefault(w => w.UserGuid == userGuid);
+                    bool value = (bool)settings.GetType().GetProperty(notificationType).GetValue(settings, null);
+                    settings.GetType().GetProperty(notificationType).SetValue(settings, !value);
+                    ctx.SaveChanges();
+                }
+                return Json(new
+                {
+                    success = true
                 });
             }
             catch (Exception ex)

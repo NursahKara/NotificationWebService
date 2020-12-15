@@ -14,5 +14,6 @@ namespace NotificationWebService.Models
         }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<NotificationSettings> NotificationSettings { get; set; }
     }
 }

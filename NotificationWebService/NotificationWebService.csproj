@@ -152,9 +152,22 @@
     <Compile Include="Migrations\202010051734296_NotificationV2.designer.cs">
       <DependentUpon>202010051734296_NotificationV2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202012151703524_NotificationSettings.cs" />
+    <Compile Include="Migrations\202012151703524_NotificationSettings.designer.cs">
+      <DependentUpon>202012151703524_NotificationSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202012151713496_NotificationSettings_1.cs" />
+    <Compile Include="Migrations\202012151713496_NotificationSettings_1.designer.cs">
+      <DependentUpon>202012151713496_NotificationSettings_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202012151722227_NotificationSettings_2.cs" />
+    <Compile Include="Migrations\202012151722227_NotificationSettings_2.designer.cs">
+      <DependentUpon>202012151722227_NotificationSettings_2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DatabaseContext.cs" />
     <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\NotificationSettings.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\AuthorizationServerProvider.cs" />
@@ -193,6 +206,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202010051734296_NotificationV2.resx">
       <DependentUpon>202010051734296_NotificationV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012151703524_NotificationSettings.resx">
+      <DependentUpon>202012151703524_NotificationSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012151713496_NotificationSettings_1.resx">
+      <DependentUpon>202012151713496_NotificationSettings_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012151722227_NotificationSettings_2.resx">
+      <DependentUpon>202012151722227_NotificationSettings_2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -62,7 +62,7 @@ namespace NotificationWebService.Hubs
                     Message = model.Message,
                     Title = model.Title,
                     ReceiverUserGuid = model.ReceiverUserGuid.ToLower(),
-                    Category = model.Category.ToUpper(new CultureInfo("tr-TR")),
+                    Category = model.Category,
                     DateCreated = model.DateCreated,
                     Guid = model.Guid,
                     IsReceived = false,
@@ -79,15 +79,28 @@ namespace NotificationWebService.Hubs
         }
         public void SendNotifications(List<NotificationModel> notifications)
         {
-            if (notifications.Count() > 0)
+            try
             {
-                foreach (var notification in notifications)
+                using (var ctx = new DatabaseContext())
                 {
-                    Clients.User(notification.ReceiverUserGuid).ReceiveNotifications(new
+                    var userGuid = notifications[0].ReceiverUserGuid;
+                    var settings = ctx.NotificationSettings.SingleOrDefault(w => w.UserGuid == userGuid);
+                    if (notifications.Count() > 0)
                     {
-                        notification
-                    });
+                        foreach (var notification in notifications)
+                        {
+                            if (settings.GetType().GetProperty(notification.Category).GetValue(settings, null).Equals(true))
+                                Clients.User(notification.ReceiverUserGuid).ReceiveNotifications(new
+                                {
+                                    notification
+                                });
+                        }
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Clients.Caller.AddError(ex.Message);
             }
         }
         public void GetUnreceivedNotifications()
